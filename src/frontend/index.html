@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Catán</title>
+        <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+    </head>
+    <body class="p-3 bg-lightgray">
+        <style>
+
+            .hex {
+                width: 9em;
+                height: 9em;
+                clip-path: polygon(0% 25%, 0% 75%, 50% 100%, 100% 75%, 100% 25%, 50% 0%);
+                background-color: rgb(196, 198, 199);
+            }
+
+            .hex:hover {
+                filter: brightness(130%);
+                -webkit-filter: brightness(130%);
+                -moz-filter: brightness(130%);
+            }
+
+            .hex-row {
+                display: flex;
+                justify-content: center;
+                margin-bottom: -2em;
+            }
+
+            .hex-row-grid-3 {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                column-gap: 0.3em;
+            }
+
+            .hex-row-grid-4 {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                column-gap: 0.3em;
+            }
+
+            .hex-row-grid-5 {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                column-gap: 0.3em;
+            }
+
+            .hex-row-grid-6 {
+                display: grid;
+                grid-template-columns: repeat(6, 1fr);
+                column-gap: 0.3em;
+            }
+
+            .vertex {
+                width: 9em;
+                height: 2.6em;
+                background-color: white;
+                color: black;
+                clip-path: circle(18%);
+            }
+
+            .edge-h {
+                height: 2.6em;
+                background-color: black;
+                clip-path: polygon(97% 0, 100% 4%, 0 97%, 0 91%);
+            }
+
+            .mirror {
+                transform: scaleX(-1);
+                -webkit-transform: scaleX(-1);
+            }
+
+            .edge-row-grid-3 {
+                display: grid;
+                grid-template-columns: repeat(3, 9em);
+                column-gap: 0.3em;
+            }
+
+            .edge-row-grid-4 {
+                display: grid;
+                grid-template-columns: repeat(4, 9em);
+                column-gap: 0.3em;
+            }
+
+            .edge-row-grid-5 {
+                display: grid;
+                grid-template-columns: repeat(5, 9em);
+                column-gap: 0.3em;
+            }
+
+            .edge-row-grid-4-h {
+                display: grid;
+                grid-template-columns: repeat(4, 0.2em);
+                column-gap: 9em;
+                height: 4.5em;
+            }
+
+            .edge-row-grid-5-h {
+                display: grid;
+                grid-template-columns: repeat(5, 0.2em);
+                column-gap: 9em;
+                height: 4.5em;
+            }
+
+            .edge-row-grid-6-h {
+                display: grid;
+                grid-template-columns: repeat(6, 0.2em);
+                column-gap: 9em;
+                height: 4.5em;
+            }
+
+            .edge-v {
+                background-color: black;
+            }
+
+            .bg-lightgray {
+                background-color: rgb(226, 226, 226);
+            }
+
+            .bg-wood {
+                background-color: #139439;
+            }
+
+            .bg-brick {
+                background-color: #db5724;
+            }
+
+            .bg-sheep {
+                background-color: #92b509;
+            }
+
+            .bg-weath {
+                background-color: #f5bd2a;
+            }
+
+            .bg-rock {
+                background-color: #a1a7a3;
+            }
+
+            .bg-desert {
+                background-color: #d3cb8e;
+            }
+        </style>
+
+        <div id="tablero">
+            <div class="hex-row">
+                <div class="hex-row-grid-3">
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-0">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-1">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-2">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hex-row">
+                <div class="hex-row-grid-4">
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-3">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-4">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-5">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-6">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hex-row">
+                <div class="hex-row-grid-5">
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-7">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-8">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-9">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-10">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-11">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hex-row">
+                <div class="hex-row-grid-4">
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-12">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-13">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-14">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-15">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hex-row">
+                <div class="hex-row-grid-3">
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-16">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-17">
+                        <strong>0</strong>
+                    </div>
+                    <div class="hex d-flex justify-content-center align-items-center" id="resource-18">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="position-absolute top-0 start-0 w-100" style="z-index: 10000; pointer-events: none;">
+            <div class="d-flex justify-content-center">
+                <div class="hex-row-grid-3">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
+                <div class="hex-row-grid-4">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: 2.2em;">
+                <div class="hex-row-grid-4">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
+                <div class="hex-row-grid-5">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: 2.2em;">
+                <div class="hex-row-grid-5">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.5em;">
+                <div class="hex-row-grid-6">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: 2.6em;">
+                <div class="hex-row-grid-6">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
+                <div class="hex-row-grid-5">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: 2.5em;">
+                <div class="hex-row-grid-5">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
+                <div class="hex-row-grid-4">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: 2.2em;">
+                <div class="hex-row-grid-4">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
+                <div class="hex-row-grid-3">
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                    <div class="vertex d-flex align-items-center justify-content-center">
+                        <strong>0</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="position-absolute top-0 start-0 w-100" style="z-index: 1000; pointer-events: none;">
+            <div class="d-flex justify-content-center" style="margin-top: 0.9em;">
+                <div class="edge-row-grid-3">
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.2em;">
+                <div class="edge-row-grid-4-h">
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div class="edge-row-grid-4">
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.2em;">
+                <div class="edge-row-grid-5-h">
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: 0.1em;">
+                <div class="edge-row-grid-5">
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h"></div>
+                        <div class="col edge-h mirror"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.2em;">
+                <div class="edge-row-grid-6-h">
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div class="edge-row-grid-5">
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.1em;">
+                <div class="edge-row-grid-5-h">
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div class="edge-row-grid-4">
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center" style="margin-top: -0.1em;">
+                <div class="edge-row-grid-4-h">
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                    <div class="edge-v"></div>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-center">
+                <div class="edge-row-grid-3">
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                    <div class="row g-0">
+                        <div class="col edge-h mirror"></div>
+                        <div class="col edge-h"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow p-3 position-absolute bottom-0 end-0 me-2 mb-2" style="width: 18rem;">
+            <p class="lead">Recursos</p>
+
+            <div class="row g-3 align-items-center mb-2">
+                <div class="col-3">
+                    <label class="form-label">Madera</label>
+                </div>
+                <div class="col-auto">
+                    <input type="number" class="form-control form-control-sm resource-value-input" value="1" min="0" resource="wood">
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-center mb-2">
+                <div class="col-3">
+                    <label class="form-label">Ladrillo</label>
+                </div>
+                <div class="col-auto">
+                    <input type="number" class="form-control form-control-sm resource-value-input" value="1" min="0" resource="brick">
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-center mb-2">
+                <div class="col-3">
+                    <label class="form-label">Oveja</label>
+                </div>
+                <div class="col-auto">
+                    <input type="number" class="form-control form-control-sm resource-value-input" value="1" min="0" resource="sheep">
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-center mb-2">
+                <div class="col-3">
+                    <label class="form-label">Trigo</label>
+                </div>
+                <div class="col-auto">
+                    <input type="number" class="form-control form-control-sm resource-value-input" value="1" min="0" resource="weath">
+                </div>
+            </div>
+
+            <div class="row g-3 align-items-center mb-2">
+                <div class="col-3">
+                    <label class="form-label">Roca</label>
+                </div>
+                <div class="col-auto">
+                    <input type="number" class="form-control form-control-sm resource-value-input" value="1" min="0" resource="rock">
+                </div>
+            </div>
+
+            <div class="d-grid">
+                <button class="btn btn-sm btn-primary mb-2" id="">
+                    Calcular mejores posiciones
+                </button>
+                <button class="btn btn-sm btn-success mb-2">
+                    Calcular ruta recomendada
+                </button>
+            </div>
+        </div>
+
+        <div class="card p-2 position-absolute shadow d-none" id="select-resource-menu" style="z-index: 1000000">
+            <p class="lead">Seleccionar recurso</p>
+            <div class="d-grid">
+                <button class="btn bg-wood text-white btn-sm mb-1" onclick="setResourceTile('wood')">Madera</button>
+                <button class="btn bg-brick text-white btn-sm mb-1" onclick="setResourceTile('brick')">Ladrillo</button>
+                <button class="btn bg-sheep text-white btn-sm mb-1" onclick="setResourceTile('sheep')">Oveja</button>
+                <button class="btn bg-weath text-white btn-sm mb-1" onclick="setResourceTile('weath')">Trigo</button>
+                <button class="btn bg-rock text-white btn-sm mb-1" onclick="setResourceTile('rock')">Roca</button>
+                <button class="btn bg-desert btn-sm mb-1" onclick="setResourceTile('desert')">Desierto</button>
+                <button class="btn btn-secondary btn-sm" id="cancel">Cancelar</button>
+            </div>
+        </div>
+    </body>
+    <script src="jquery/jquery-3.6.0.min.js"></script>
+    <script src="bootstrap/bootstrap.bundle.min.js"></script>
+    <script>
+        let selectedTile = null;
+        let resourceTiles = new Array(19).fill(null);
+
+        let resourceValues = {
+            'wood': 1,
+            'brick': 1,
+            'sheep': 1,
+            'weath': 1,
+            'rock': 1,
+            'desert': 0
+        };
+
+        const setResourceTile = (resource) => {
+            selectedTile.attr('class', function(i, c){
+                return c.replace(/(^|\s)bg-\S+/g, '');
+            });
+            selectedTile.addClass(`bg-${resource}`);
+            $('#select-resource-menu').addClass('d-none');
+
+            resourceTiles[Number(selectedTile.attr('id').replace('resource-', ''))] = resource;
+        }
+
+        $(document).ready(() => {
+            $('.hex').on('click', function(event) {
+                selectedTile = $(this);
+                const menu = $('#select-resource-menu');
+                menu.css('top', event.pageY);
+                menu.css('left', event.pageX);
+                menu.removeClass('d-none');
+            });
+
+            $('#cancel').on('click', (event) => {
+                $('#select-resource-menu').addClass('d-none');
+            });
+
+            $('.resource-value-input').on('input', function() {
+                const resource = $(this).attr('resource');
+                const value = Number($(this).val());
+                resourceValues[resource] = value;
+            });
+        });
+    </script>
+</html>
