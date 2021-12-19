@@ -1,5 +1,6 @@
 import pcst_fast
-from random import shuffle
+import networkx as nx
+from itertools import combinations
 
 edges = [
     [0,   3], [0,   4], #  0
@@ -55,49 +56,93 @@ edges = [
     [50, 53],           # 50
 ]
 
+# prizes = [
+#           10, 6, 10,
+#         10, 16, 16, 10,
+#         13, 22, 24, 19,
+#        3, 19, 20, 27, 9,
+#       11, 13, 18, 27, 21,
+#      8, 15, 14, 22, 33, 12,
+#      8, 21, 8, 20, 24, 12,
+#       17, 13, 10, 18, 14,
+#         9, 19, 9, 10, 2,
+#          19, 13, 11, 4,
+#          10, 13, 5, 2,
+#             10, 3, 2
+# ]
+
 prizes = [
-          10, 6, 10,
-        10, 16, 16, 10,
-        13, 22, 24, 19,
-       3, 19, 20, 27, 9,
-      11, 13, 18, 27, 21,
-     8, 15, 14, 22, 33, 12,
-     8, 21, 8, 20, 24, 12,
-      17, 13, 10, 18, 14,
-        9, 19, 9, 10, 2,
-         19, 13, 11, 4,
-         10, 13, 5, 2,
-            10, 3, 2
+               0.278, 0.224, 0.278,
+            0.278, 0.502, 0.502, 0.278,
+            0.390, 0.668, 0.780, 0.610,
+        0.112, 0.556, 0.668, 0.888, 0.332,
+        0.334, 0.389, 0.556, 1.166, 0.776,
+     0.222, 0.445, 0.389, 0.946, 1.332, 0.444,
+     0.222, 0.665, 0.223, 0.892, 1.056, 0.444,
+        0.554, 0.443, 0.336, 1.036, 0.500,
+        0.332, 0.610, 0.307, 0.336, 0.056,
+            0.610, 0.361, 0.363, 0.112,
+            0.278, 0.361, 0.139, 0.056,
+               0.278, 0.083, 0.056
 ]
 
-# avgs = []
-# for edge in edges:
-#     avg = abs(prizes[edge[0]] - prizes[edge[1]])
-#     avgs.append(avg)
-
-# # foo = sum(avgs) / len(avgs)
-# avgs.sort()
-# avgs = avgs[:31]
-# foo = sum(avgs) / len(avgs)
-
-# avg_node_value = sum(prizes) / len(prizes)
-# cost_value = sum(avgs) / len(avgs)
-# costs = [avg_node_value] * 72
-
-# foo *= 21
-# print(foo)
-# costs = [foo] * 72
-# result_nodes, result_edges = pcst_fast.pcst_fast(edges, prizes, costs, -1, 1, 'gw', 0)
-
-bar = 1
+cost = 0
 while True:
-    costs = [bar] * 72
+    costs = [cost] * 72
     result_nodes, result_edges = pcst_fast.pcst_fast(edges, prizes, costs, -1, 1, 'gw', 0)
-    if len(result_nodes) <= 15:
-        # print(bar)
+    if len(result_nodes) <= 16:
         break
-    bar += 1
+    cost += 0.1
 
-print(len(result_nodes))
+n = len(result_nodes)
+
+new_indexes = {}
+subgraph_prizes = []
+for i, index in enumerate(result_nodes):
+    subgraph_prizes.append(prizes[index])
+    new_indexes[index] = i
+
+# corregir aristas no consideradas por PCST
+subgraph_edges = []
+for comb in combinations(result_nodes, 2):
+    for edge in edges:
+        if comb == (edge[0], edge[1]) or comb == (edge[1], edge[0]):
+            subgraph_edges.append((new_indexes[comb[0]], new_indexes[comb[1]]))
+
 print(result_nodes)
-print(result_edges)
+print(subgraph_edges)
+
+inverse_edges = []
+for i in range(n):
+    for j in range(n):
+        if i == j \
+            or (i, j) in subgraph_edges \
+            or (j, i) in subgraph_edges \
+            or (i, j) in inverse_edges \
+            or (j, i) in inverse_edges:
+            continue
+
+        inverse_edges.append((i, j))
+
+G = nx.Graph()
+G.add_nodes_from(subgraph_prizes)
+G.add_edges_from(inverse_edges)
+
+cliques = nx.enumerate_all_cliques(G)
+cliques_5 = [clique for clique in cliques if len(clique) == 5]
+
+max_prize = 0
+max_clique = None
+for clique in cliques_5:
+    prize = 0
+    for node_index in clique:
+        prize += subgraph_prizes[node_index]
+    if prize > max_prize:
+        max_prize = prize
+        max_clique = clique
+
+print(max_clique, max_prize)
+
+# max_clique = nx.max_weight_clique(G, weight=None)
+# for node_index in max_clique[0]:
+#     print(node_index, subgraph_prizes[node_index])
