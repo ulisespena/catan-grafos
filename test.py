@@ -96,7 +96,9 @@ while True:
 
 n = len(result_nodes)
 
+# key: índice en grafo original => value: índice en nuevo subgrafo de NetworkX
 new_indexes = {}
+
 subgraph_prizes = []
 for i, index in enumerate(result_nodes):
     subgraph_prizes.append(prizes[index])
@@ -106,31 +108,34 @@ for i, index in enumerate(result_nodes):
 subgraph_edges = []
 for comb in combinations(result_nodes, 2):
     for edge in edges:
-        if comb == (edge[0], edge[1]) or comb == (edge[1], edge[0]):
-            subgraph_edges.append((new_indexes[comb[0]], new_indexes[comb[1]]))
+        # if comb == (edge[0], edge[1]) or comb == (edge[1], edge[0]):
+        if sorted(comb) == sorted(edge):
+            # buscamos en las aristas originales si estas deben estar unidas
+            # pero obtenemos los índices relativos al nuevo subgrafo
+            subgraph_edges.append(sorted((new_indexes[comb[0]], new_indexes[comb[1]])))
 
-print(result_nodes)
-print(subgraph_edges)
-
+# calculamos el grafo complementario
 inverse_edges = []
-for i in range(n):
-    for j in range(n):
-        if i == j \
-            or (i, j) in subgraph_edges \
-            or (j, i) in subgraph_edges \
-            or (i, j) in inverse_edges \
-            or (j, i) in inverse_edges:
-            continue
+for comb in combinations(range(n), 2):
+    comb = sorted(comb)
+    if comb in subgraph_edges \
+    or comb in inverse_edges:
+        continue
 
-        inverse_edges.append((i, j))
+    inverse_edges.append(comb)
 
+# creamos el grafo en NetworkX
 G = nx.Graph()
 G.add_nodes_from(subgraph_prizes)
 G.add_edges_from(inverse_edges)
 
+# obtenemos todos los cliques
+# y seleccionamos solamente los largo 5
 cliques = nx.enumerate_all_cliques(G)
 cliques_5 = [clique for clique in cliques if len(clique) == 5]
 
+# iteramos todos los cliques seleccionados
+# guardando el que presenta mayor valor total
 max_prize = 0
 max_clique = None
 for clique in cliques_5:
@@ -143,6 +148,9 @@ for clique in cliques_5:
 
 print(max_clique, max_prize)
 
-# max_clique = nx.max_weight_clique(G, weight=None)
-# for node_index in max_clique[0]:
-#     print(node_index, subgraph_prizes[node_index])
+# pasamos indexes de subgrafo a indexes del grafo original
+# invertimos el diccionario new_indexes
+inv_indexes = {value: key for key, value in new_indexes.items()}
+max_clique_original = [inv_indexes[index] for index in max_clique]
+
+print(max_clique_original)

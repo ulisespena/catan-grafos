@@ -5,11 +5,10 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Catán</title>
-        <link rel="stylesheet" href="bootstrap/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap/bootstrap.min.css') }}">
     </head>
     <body class="p-3 bg-lightgray">
         <style>
-
             .hex {
                 width: 9em;
                 height: 9em;
@@ -142,19 +141,28 @@
             .bg-desert {
                 background-color: #d3cb8e;
             }
+
+            .input-prob {
+                width: 60px;
+                text-align: center;
+            }
+
+            .vertex-selected {
+                border: solid 10px cyan;
+            }
         </style>
 
         <div id="tablero">
             <div class="hex-row">
                 <div class="hex-row-grid-3">
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-0">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-0">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-1">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-1">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-2">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-2">
                     </div>
                 </div>
             </div>
@@ -162,16 +170,16 @@
             <div class="hex-row">
                 <div class="hex-row-grid-4">
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-3">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-3">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-4">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-4">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-5">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-5">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-6">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-6">
                     </div>
                 </div>
             </div>
@@ -179,19 +187,19 @@
             <div class="hex-row">
                 <div class="hex-row-grid-5">
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-7">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-7">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-8">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-8">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-9">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-9">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-10">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-10">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-11">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-11">
                     </div>
                 </div>
             </div>
@@ -199,16 +207,16 @@
             <div class="hex-row">
                 <div class="hex-row-grid-4">
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-12">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-12">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-13">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-13">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-14">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-14">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-15">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-15">
                     </div>
                 </div>
             </div>
@@ -216,13 +224,13 @@
             <div class="hex-row">
                 <div class="hex-row-grid-3">
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-16">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-16">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-17">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-17">
                     </div>
                     <div class="hex d-flex justify-content-center align-items-center" id="resource-18">
-                        <strong>0</strong>
+                        <input type="text" class="input-prob" id="prob-18">
                     </div>
                 </div>
             </div>
@@ -231,13 +239,13 @@
         <div class="position-absolute top-0 start-0 w-100" style="z-index: 10000; pointer-events: none;">
             <div class="d-flex justify-content-center">
                 <div class="hex-row-grid-3">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-0">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-1">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-2">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -245,16 +253,16 @@
 
             <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
                 <div class="hex-row-grid-4">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-3">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-4">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-5">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-6">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -262,16 +270,16 @@
 
             <div class="d-flex justify-content-center" style="margin-top: 2.2em;">
                 <div class="hex-row-grid-4">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-7">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-8">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-9">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-10">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -279,19 +287,19 @@
 
             <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
                 <div class="hex-row-grid-5">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-11">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-12">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-13">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-14">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-15">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -299,19 +307,19 @@
 
             <div class="d-flex justify-content-center" style="margin-top: 2.2em;">
                 <div class="hex-row-grid-5">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-16">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-17">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-18">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-19">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-20">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -319,22 +327,22 @@
 
             <div class="d-flex justify-content-center" style="margin-top: -0.5em;">
                 <div class="hex-row-grid-6">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-21">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-22">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-23">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-24">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-25">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-26">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -342,22 +350,22 @@
 
             <div class="d-flex justify-content-center" style="margin-top: 2.6em;">
                 <div class="hex-row-grid-6">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-27">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-28">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-29">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-30">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-31">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-32">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -365,19 +373,19 @@
 
             <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
                 <div class="hex-row-grid-5">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-33">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-34">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-35">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-36">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-37">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -385,19 +393,19 @@
 
             <div class="d-flex justify-content-center" style="margin-top: 2.5em;">
                 <div class="hex-row-grid-5">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-38">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-39">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-40">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-41">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-42">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -405,16 +413,16 @@
 
             <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
                 <div class="hex-row-grid-4">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-43">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-44">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-45">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-46">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -422,16 +430,16 @@
 
             <div class="d-flex justify-content-center" style="margin-top: 2.2em;">
                 <div class="hex-row-grid-4">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-47">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-48">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-49">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-50">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -439,13 +447,13 @@
 
             <div class="d-flex justify-content-center" style="margin-top: -0.7em;">
                 <div class="hex-row-grid-3">
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-51">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-52">
                         <strong>0</strong>
                     </div>
-                    <div class="vertex d-flex align-items-center justify-content-center">
+                    <div class="vertex d-flex align-items-center justify-content-center" id="vertex-53">
                         <strong>0</strong>
                     </div>
                 </div>
@@ -678,11 +686,11 @@
             </div>
 
             <div class="d-grid">
-                <button class="btn btn-sm btn-primary mb-2" id="">
-                    Calcular mejores posiciones
+                <button class="btn btn-sm btn-primary mb-2" id="calcular-valores">
+                    Calcular valores
                 </button>
-                <button class="btn btn-sm btn-success mb-2">
-                    Calcular ruta recomendada
+                <button class="btn btn-sm btn-success mb-2" id="calcular-posiciones">
+                    Calcular mejores posiciones
                 </button>
             </div>
         </div>
@@ -700,11 +708,28 @@
             </div>
         </div>
     </body>
-    <script src="jquery/jquery-3.6.0.min.js"></script>
-    <script src="bootstrap/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='jquery/jquery-3.6.0.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script>
         let selectedTile = null;
         let resourceTiles = new Array(19).fill(null);
+
+        let resourceTilesValues = new Array(19).fill(0);
+        let vertexValues = new Array(54).fill(0);
+
+        let tileNumProb = {
+            2: 1,
+            3: 2,
+            4: 3,
+            5: 4,
+            6: 5,
+            7: 6,
+            8: 5,
+            9: 4,
+            10: 3,
+            11: 2,
+            12: 1
+        };
 
         let resourceValues = {
             'wood': 1,
@@ -725,8 +750,68 @@
             resourceTiles[Number(selectedTile.attr('id').replace('resource-', ''))] = resource;
         }
 
+        const vertex_tiles = {
+            0: [0],
+            1: [1],
+            2: [2],
+            3: [0],
+            4: [0, 1],
+            5: [1, 2],
+            6: [2],
+            7: [0, 3],
+            8: [0, 1, 4],
+            9: [1, 2, 5],
+            10: [2, 6],
+            11: [3],
+            12: [0, 3, 4],
+            13: [1, 4, 5],
+            14: [2, 5, 6],
+            15: [6],
+            16: [3, 7],
+            17: [3, 4, 8],
+            18: [4, 5, 9],
+            19: [5, 6, 10],
+            20: [6, 11],
+            21: [7],
+            22: [3, 7, 8],
+            23: [4, 8, 9],
+            24: [5, 8, 10],
+            25: [6, 10, 11],
+            26: [11],
+            27: [7],
+            28: [7, 8, 12],
+            29: [8, 9, 13],
+            30: [9, 10, 14],
+            31: [10, 11, 15],
+            32: [11],
+            33: [7, 12],
+            34: [8, 12, 13],
+            35: [9, 13, 14],
+            36: [10, 14, 15],
+            37: [11, 15],
+            38: [12],
+            39: [12, 13, 16],
+            40: [13, 14, 17],
+            41: [14, 15, 18],
+            42: [15],
+            43: [12, 16],
+            44: [13, 16, 17],
+            45: [14, 17, 18],
+            46: [15, 18],
+            47: [16],
+            48: [16, 17],
+            49: [17, 18],
+            50: [18],
+            51: [16],
+            52: [17],
+            53: [18]
+        };
+
         $(document).ready(() => {
             $('.hex').on('click', function(event) {
+                if(!event.ctrlKey) {
+                    return;
+                }
                 selectedTile = $(this);
                 const menu = $('#select-resource-menu');
                 menu.css('top', event.pageY);
@@ -742,6 +827,53 @@
                 const resource = $(this).attr('resource');
                 const value = Number($(this).val());
                 resourceValues[resource] = value;
+            });
+
+            $('.input-prob').keypress(function(e) {
+				let allow_values = [48, 49, 50, 51, 52, 53, 54, 55, 56, 57];
+				if (allow_values.indexOf(e.which) == -1) {
+					return false;
+				}
+			});
+
+            $('#calcular-valores').click(() => {
+                resourceTiles.forEach((resource, i) => {
+                    let tile_value = resourceValues[resource];
+                    let tile_prob = Number($(`#prob-${i}`).val());
+                    resourceTilesValues[i] = tile_value * tileNumProb[tile_prob]/36;
+                });
+
+                for(const [vertex, tiles] of Object.entries(vertex_tiles)) {
+                    let sum = 0;
+                    tiles.forEach(tile_id => { sum += resourceTilesValues[tile_id] });
+                    $(`#vertex-${vertex}`).html(`<strong>${sum.toFixed(2)}</strong>`);
+                    vertexValues[vertex] = Math.round((sum + Number.EPSILON) * 100) / 100;
+                }
+            });
+
+            $('#calcular-posiciones').click(() => {
+                $.ajax({
+                    url: 'http://localhost:5000/calc-best-positions',
+                    type: 'POST',
+                    dataType: 'json',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    data: JSON.stringify({ prizes: vertexValues }),
+                    success: (best_positions) => {
+                        for(let i = 0; i < 54; i++) {
+                            if(best_positions.includes(i)) {
+                                $(`#vertex-${i}`).addClass('vertex-selected');
+                            } else {
+                                $(`#vertex-${i}`).removeClass('vertex-selected');
+                            }
+                        }
+                    },
+                    error: (err) => {
+                        console.log(err)
+                    }
+                });
             });
         });
     </script>
