@@ -70,6 +70,10 @@ def calc_best_positions(prizes):
     # key: índice en grafo original => value: índice en nuevo subgrafo de NetworkX
     new_indexes = {}
 
+    new_edges = {}
+    for i, index in enumerate(result_edges):
+        new_edges[index] = i
+
     subgraph_prizes = []
     for i, index in enumerate(result_nodes):
         subgraph_prizes.append(prizes[index])
@@ -79,13 +83,14 @@ def calc_best_positions(prizes):
     subgraph_edges = []
     for comb in combinations(result_nodes, 2):
         for edge in edges:
-            # if comb == (edge[0], edge[1]) or comb == (edge[1], edge[0]):
             if sorted(comb) == sorted(edge):
                 # buscamos en las aristas originales si estas deben estar unidas
                 # pero obtenemos los índices relativos al nuevo subgrafo
                 subgraph_edges.append(sorted((new_indexes[comb[0]], new_indexes[comb[1]])))
 
     # calculamos el grafo complementario
+    # con n: cantidad de nodos de subgrafo entregado
+    # por PCST
     inverse_edges = []
     for comb in combinations(range(n), 2):
         comb = sorted(comb)
@@ -117,9 +122,19 @@ def calc_best_positions(prizes):
             max_prize = prize
             max_clique = clique
 
+    # falta determinar las aristas del clique solución
+    subgraph_edges = [[new_indexes[edges[edge][0]], new_indexes[edges[edge][1]]] for edge in result_edges]
+    subgraph_prizes = [1 if i in max_clique else 0 for i in range(len(result_nodes))]
+    subgraph_costs = [0 for _ in range(len(subgraph_edges))]
+
+    result_nodes, result_edges = pcst_fast.pcst_fast(subgraph_edges, subgraph_prizes, subgraph_costs, -1, 1, 'gw', 0)
+
     # pasamos indexes de subgrafo a indexes del grafo original
     # invertimos el diccionario new_indexes
     inv_indexes = {value: key for key, value in new_indexes.items()}
     max_clique_original = [inv_indexes[index] for index in max_clique]
 
-    return max_clique_original
+    inv_edges = {value: key for key, value in new_edges.items()}
+    edges_original = [inv_edges[index] for index in result_edges]
+
+    return max_clique_original, edges_original

@@ -15,7 +15,9 @@ def index():
 @cross_origin()
 def calc():
     data = request.get_json()
-    best_positions = calc_best_positions(data['prizes'])
+    best_positions, edges = calc_best_positions(data['prizes'])
     best_positions = [str(pos) for pos in best_positions]
+    edges = [str(edge) for edge in edges]
     json_str_positions = '[' + ','.join(best_positions) + ']'
-    return json_str_positions
+    json_str_edges = '[' + ','.join(edges) + ']'
+    return "{ \"positions\": %s, \"edges\": %s }" % (json_str_positions, json_str_edges)
